@@ -5,7 +5,71 @@ final class MovieQuizViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    //    MARK: weak - слабая ссылка, добавил от себя,
+    //так же данные ниже возможно нужно надо будет сделать приватными
+    @IBOutlet private weak var imageView: UIImageView!
+    @IBOutlet private weak var textLabel: UILabel!
+    @IBOutlet private weak var counterLabel: UILabel!
+    
+    @IBAction private func yesButtonClicked(_ sender: UIButton) {
+    }
+    @IBAction private func noButtonClicked(_ sender: UIButton) {
+    }
 }
+
+private struct QuizQuestion {
+    let image: String
+    let text: String = "Рейтинг этого фильма больше чем 6?"
+    let correctAnswer: Bool
+}
+
+private let question: [QuizQuestion] = [
+    QuizQuestion(image: "The Godfather",
+                 correctAnswer: true),
+    QuizQuestion(image: "The Dark Knight",
+                 correctAnswer: true),
+    QuizQuestion(image: "Kill Bill",
+                 correctAnswer: true),
+    QuizQuestion(image: "The Avengers",
+                 correctAnswer: true),
+    QuizQuestion(image: "Deadpool",
+                 correctAnswer: true),
+    QuizQuestion(image: "The Green Knight",
+                 correctAnswer: true),
+    QuizQuestion(image: "Old",
+                 correctAnswer: false),
+    QuizQuestion(image: "The Ice Age Adventures of Buck Wild",
+                 correctAnswer: false),
+    QuizQuestion(image: "Tesla",
+                 correctAnswer: false),
+    QuizQuestion(image: "Vivarium",
+                 correctAnswer: false)
+]
+
+private var currentQuestionIndex = 0
+
+private var correctAnswers = 0
+
+private struct QuizStepViewModel {
+    let image: UIImage
+    let question: String
+    let questNumber: String
+}
+
+private func convert(model: QuizQuestion) -> QuizStepViewModel {
+    let questionStep = QuizStepViewModel(
+        image: UIImage(named: model.image) ?? UIImage(),
+        question: model.text,
+        questNumber: "\(currentQuestionIndex + 1)/ \(question.count)")
+    return questionStep
+}
+
+//private func show(quiz step: QuizStepViewModel) {
+//  imageView.image = step.image
+//  textLabel.text = step.question
+//  counterLabel.text = step.questionNumber
+//}
+
 
 /*
  Mock-данные
@@ -69,4 +133,4 @@ final class MovieQuizViewController: UIViewController {
  Настоящий рейтинг: 5,8
  Вопрос: Рейтинг этого фильма больше чем 6?
  Ответ: НЕТ
-*/
+ */
