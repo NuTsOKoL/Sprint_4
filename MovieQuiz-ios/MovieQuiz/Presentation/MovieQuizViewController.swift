@@ -2,11 +2,11 @@ import UIKit
 
 final class MovieQuizViewController: UIViewController {
     
-    
-    
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var textLabel: UILabel!
     @IBOutlet private weak var counterLabel: UILabel!
+    @IBOutlet weak var noButton: UIButton!
+    @IBOutlet weak var yesButton: UIButton!
     
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
         let currentQuestion = questions[currentQuestionIndex]
@@ -95,6 +95,8 @@ final class MovieQuizViewController: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.showNextQuestionOrResults()
         }
+        noButton.isEnabled = false
+        yesButton.isEnabled = false
     }
     private func showNextQuestionOrResults() {
         if currentQuestionIndex == questions.count - 1 {
@@ -109,6 +111,8 @@ final class MovieQuizViewController: UIViewController {
             let nextQuestion = questions[currentQuestionIndex]
             let viewModel = convert(model: nextQuestion)
             imageView.layer.borderColor = UIColor.clear.cgColor
+            noButton.isEnabled = true
+            yesButton.isEnabled = true
             
             show(quiz: viewModel)
         }
@@ -125,7 +129,6 @@ final class MovieQuizViewController: UIViewController {
             message: result.text,
             preferredStyle: .alert)
         
-        
         let action = UIAlertAction(title: result.buttonText, style: .default) { _ in
             self.currentQuestionIndex = 0
             self.correctAnswers = 0
@@ -138,6 +141,5 @@ final class MovieQuizViewController: UIViewController {
         alert.addAction(action)
         
         self.present(alert, animated: true, completion: nil)
-        
     }
 }
