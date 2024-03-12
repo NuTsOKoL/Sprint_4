@@ -5,8 +5,8 @@ final class MovieQuizViewController: UIViewController {
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var textLabel: UILabel!
     @IBOutlet private weak var counterLabel: UILabel!
-    @IBOutlet weak var noButton: UIButton!
-    @IBOutlet weak var yesButton: UIButton!
+    @IBOutlet private weak var noButton: UIButton!
+    @IBOutlet private weak var yesButton: UIButton!
     
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
         let currentQuestion = questions[currentQuestionIndex]
@@ -85,6 +85,7 @@ final class MovieQuizViewController: UIViewController {
     private func showAnswerResult(isCorrect: Bool) {
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
+        imageView.layer.cornerRadius = 20
         
         if isCorrect {
             correctAnswers += 1
@@ -106,6 +107,8 @@ final class MovieQuizViewController: UIViewController {
                 text: text,
                 buttonText: "Сыграть еще раз")
             show(quiz: viewModel)
+            noButton.isEnabled = true
+            yesButton.isEnabled = true
         } else {
             currentQuestionIndex += 1
             let nextQuestion = questions[currentQuestionIndex]
