@@ -62,7 +62,7 @@ final class MovieQuizViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        imageView.layer.cornerRadius = 20
         let _: () = show(quiz: QuizStepViewModel(
             image: .theGodfather,
             question: "Рейтинг этого фильма больше чем 6?",
@@ -85,7 +85,6 @@ final class MovieQuizViewController: UIViewController {
     private func showAnswerResult(isCorrect: Bool) {
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
-        imageView.layer.cornerRadius = 20
         
         if isCorrect {
             correctAnswers += 1
