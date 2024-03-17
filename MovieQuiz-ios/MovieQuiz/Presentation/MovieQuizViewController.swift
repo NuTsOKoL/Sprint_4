@@ -11,11 +11,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         DispatchQueue.main.async { [weak self] in
             self?.show(quiz: viewModel)
         }
-        
     }
-    
-    
-    
     
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var textLabel: UILabel!
@@ -59,54 +55,22 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         questionFactory.delegate = self
         self.questionFactory = questionFactory
         
-//        if let firstQuestion = questionFactory.requestNextQuestion() {
-//            currentQuestion = firstQuestion
-//            let viewModel = convert(model: firstQuestion)
-//            show(quiz: viewModel)
-//        }
-//    меняем на:
         questionFactory.requestNextQuestion()
-        
-        //        let _: () = show(quiz: QuizStepViewModel(
-        //            image: .theGodfather,
-        //            question: "Рейтинг этого фильма больше чем 6?",
-        //            questionNumber: "1/10"))
-        //    }
     }
     
     
     func convert(model: QuizQuestion) -> QuizStepViewModel {
-        //        была переменная questionStep =
         QuizStepViewModel(
             image: UIImage(named: model.image) ?? UIImage(),
             question: model.text,
             questionNumber: "\(currentQuestionIndex + 1)/ \(questionAmount)")
-        //        return questionStep
     }
     func show(quiz step: QuizStepViewModel) {
         imageView.image = step.image
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
         
-        
-        
         func didReceiveNextQuestion(question: QuizQuestion?) {
-            //            guard let question = question else {
-            //                return
-            //            }
-            
-            //            currentQuestion = question
-            //            let viewModel = convert(model: question)
-            //            DispatchQueue.main.async { [weak self] in
-            //                self?.show(quiz: viewModel)
-            //            }
-//        }
-        //        у меня было, но по заданию убрали (и сверху та же функция)
-//            if let firstQuestion = self.questionFactory.requestNextQuestion() {
-//                            self.currentQuestion = firstQuestion
-//                            let viewModel = self.convert(model: firstQuestion)
-//                            self.show(quiz: viewModel)
-//            }
             questionFactory?.requestNextQuestion()
     }
 }
@@ -148,38 +112,22 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             imageView.layer.borderColor = UIColor.clear.cgColor
             noButton.isEnabled = true
             yesButton.isEnabled = true
-//            if let nextQuestion = questionFactory.requestNextQuestion() {
-//                currentQuestion = nextQuestion
-//                let viewModel = convert(model: nextQuestion)
-//                
-//                
-//                show(quiz: viewModel)
-//            }
             questionFactory?.requestNextQuestion()
-
         }
     }
-    
     
     func show(quiz result: QuizResultsViewModel) {
         let alert = UIAlertController(
             title: result.title,
             message: result.text,
             preferredStyle: .alert)
-        
+                
         let action = UIAlertAction(title: result.buttonText, style: .default) { [weak self] _ in
             guard let self = self else { return }
             
             self.currentQuestionIndex = 0
             self.correctAnswers = 0
             self.imageView.layer.borderColor = UIColor.clear.cgColor
-            
-//            if  let firstQustion = self.questionFactory.requestNextQuestion() {
-//                self.currentQuestion = firstQustion
-//                let viewModel = self.convert(model: firstQustion)
-//                
-//                self.show(quiz: viewModel)
-//            }
             self.questionFactory?.requestNextQuestion()
 
             alert.addAction(action)
