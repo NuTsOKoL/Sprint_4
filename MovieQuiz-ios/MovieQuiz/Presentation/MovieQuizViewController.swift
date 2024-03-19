@@ -103,7 +103,9 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             let alertModel = AlertModel(
                 title: "Этот раунд окончен!",
                 message: text,
-                buttonText: "Сыграть еще раз") { [weak self] in }
+                buttonText: "Сыграть еще раз") { [weak self] in
+                    guard self != nil else {return}
+                }
             //            show(alertModel: alertModel)
             noButton.isEnabled = true
             yesButton.isEnabled = true
