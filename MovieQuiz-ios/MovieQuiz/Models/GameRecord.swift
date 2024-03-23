@@ -5,7 +5,9 @@ struct GameRecord: Codable {
     let total: Int
     let date: Date
     
-    func isBetterThan(_ anotheer: GameRecord) -> Bool {
-        correct > anotheer.correct
+}
+extension GameRecord: Comparable {
+    static func < (lhs: GameRecord, rhs: GameRecord) -> Bool {
+        lhs.correct < rhs.correct
     }
 }

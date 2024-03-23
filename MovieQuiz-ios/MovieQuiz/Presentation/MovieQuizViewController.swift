@@ -14,6 +14,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private var alertPresenter: AlertProtocol?
     private var currentQuestionIndex = 0
     private var correctAnswers = 0
+    private var statisticService: StatisticServiceProtocol?
     
     
     // MARK: - viewDidLoad
@@ -25,8 +26,9 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         let questionFactory = QuestionFactory()
         questionFactory.delegate = self
         self.questionFactory = questionFactory
-        
         questionFactory.requestNextQuestion()
+        alertPresenter = AlertPresenter()
+        statisticService = StatisticServiceImplementation()
     }
     //MARK: - QuestionFactoryDelegate
     func didReceiveNextQuestion(question: QuizQuestion?) {
