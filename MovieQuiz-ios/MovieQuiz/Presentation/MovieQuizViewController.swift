@@ -11,23 +11,19 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private let questionAmount: Int = 10
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
-    private var alertPresenter: AlertProtocol?
+    private var alertPresenter: AlertPresenter?
     private var currentQuestionIndex = 0
     private var correctAnswers = 0
     private var statisticService: StatisticServiceProtocol?
     
     
     // MARK: - viewDidLoad
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         imageView.layer.cornerRadius = 20
-        
-        let questionFactory = QuestionFactory()
-        questionFactory.delegate = self
-        self.questionFactory = questionFactory
-        questionFactory.requestNextQuestion()
-        alertPresenter = AlertPresenter()
+        alertPresenter = AlertPresenter(viewController: self)
+        questionFactory = QuestionFactory(delegate: self)
+        questionFactory?.requestNextQuestion()
         statisticService = StatisticServiceImplementation()
     }
     //MARK: - QuestionFactoryDelegate
@@ -35,111 +31,106 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         guard let question = question else {
             return
         }
-        
         currentQuestion = question
         let viewModel = convert(model: question)
         DispatchQueue.main.async { [weak self] in
             self?.show(quiz: viewModel)
         }
-        
     }
-    //MARK: - yes/no button action
+    //MARK: - yes/no button
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
-        guard let currentQuestion = currentQuestion else {
+        guard let currentQuestion else {
             return
         }
         let givenAnswer = true
         
+        noButton.isEnabled = false
+        yesButton.isEnabled = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self else {return}
+            self.noButton.isEnabled = true
+            self.yesButton.isEnabled = true
+        }
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
     @IBAction private func noButtonClicked(_ sender: UIButton) {
-        guard let currentQuestion = currentQuestion else {
+        guard let currentQuestion else {
             return
         }
         let givenAnswer = false
         
+        noButton.isEnabled = false
+        yesButton.isEnabled = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self else {return}
+            self.noButton.isEnabled = true
+            self.yesButton.isEnabled = true
+        }
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
     
-    func convert(model: QuizQuestion) -> QuizStepViewModel {
-        QuizStepViewModel(
+    private func convert(model: QuizQuestion) -> QuizStepViewModel {
+        let questionStep = QuizStepViewModel(
             image: UIImage(named: model.image) ?? UIImage(),
             question: model.text,
-            questionNumber: "\(currentQuestionIndex + 1)/ \(questionAmount)")
+            questionNumber: "\(currentQuestionIndex + 1)/\(questionAmount)")
+        return questionStep
     }
-    func show(quiz step: QuizStepViewModel) {
+    
+    private func show(quiz step: QuizStepViewModel) {
         imageView.image = step.image
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
-        
-        func didReceiveNextQuestion(question: QuizQuestion?) {
-            questionFactory?.requestNextQuestion()
-        }
     }
     
-    
-    func showAnswerResult(isCorrect: Bool) {
-        
+    private func showAnswerResult(isCorrect: Bool) {
         if isCorrect {
             correctAnswers += 1
         }
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
-        imageView.layer.borderColor = isCorrect ? UIColor.ypRed.cgColor : UIColor.ypGreen.cgColor
+        imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
             self.showNextQuestionOrResults()
             self.imageView.layer.borderColor = UIColor.clear.cgColor
         }
-        noButton.isEnabled = false
-        yesButton.isEnabled = false
     }
+    
     func showNextQuestionOrResults() {
         if currentQuestionIndex == questionAmount - 1 {
-            let text = correctAnswers == questionAmount ?
-            "Поздравялем вы ответили на 10 из 10!" :
-            "Вы ответили на  \(correctAnswers) из 10, попробуйте еще раз!"
-            //выше по текучке задания
-            //            let text = "Ваш реузльтат:  \(correctAnswers)/10"
-            let alertModel = AlertModel(
-                title: "Этот раунд окончен!",
-                message: text,
-                buttonText: "Сыграть еще раз") { [weak self] in
-                    guard self != nil else {return}
-                }
-            //            show(alertModel: alertModel)
-            noButton.isEnabled = true
-            yesButton.isEnabled = true
+            showResult()
         } else {
             currentQuestionIndex += 1
-            
-            imageView.layer.borderColor = UIColor.clear.cgColor
-            noButton.isEnabled = true
-            yesButton.isEnabled = true
             questionFactory?.requestNextQuestion()
         }
-       
     }
     
+    private func showResult() {
+        statisticService?.store(correct: correctAnswers, total: questionAmount)
+        
+        let alertModel = AlertModel(
+            title: "Этот раунд окончен!",
+            message: resultMessage(),
+            buttonText: "Сыграть еще раз") { [weak self] in
+                self?.currentQuestionIndex = 0
+                self?.correctAnswers = 0
+                self?.questionFactory?.requestNextQuestion()
+            }
+        alertPresenter?.show(alertModel: alertModel)
+    }
     
-    //    func show(quiz result: AlertModel) {
-    //        let alert = UIAlertController(
-    //            title: result.title,
-    //            message: result.buttonText,
-    //            preferredStyle: .alert)
-    //
-    //
-    //        let action = UIAlertAction(title: result.buttonText, style: .default) { [weak self] _ in
-    //            guard let self = self else { return }
-    //
-    //            self.currentQuestionIndex = 0
-    //            self.correctAnswers = 0
-    //            self.imageView.layer.borderColor = UIColor.clear.cgColor
-    //            self.questionFactory?.requestNextQuestion()
-    //
-    //            alert.addAction(action)
-    //            self.present(alert, animated: true, completion: nil)
-    //        }
-    //    }
+    private func resultMessage() -> String {
+        guard let statisticService = statisticService, let bestGame = statisticService.bestGame else {
+            return ""
+        }
+        let totalPlayCount = "Количество сыгранных квизов: \(statisticService.gamesCount)"
+        let currentGameResult = "Ваш результат: \(correctAnswers)/\(questionAmount) "
+        let averageAccuracy = "Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%"
+        let bestGameInfo = "Рекорд:  \(bestGame.correct)/10" + "(\(bestGame.date.dateTimeString)"
+        let resultMessage = [currentGameResult, totalPlayCount, bestGameInfo,
+                             averageAccuracy].joined(separator: "\n")
+        return resultMessage
+    }
 }

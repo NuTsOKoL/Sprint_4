@@ -1,13 +1,7 @@
 import UIKit
 
 final class StatisticServiceImplementation: StatisticServiceProtocol {
-
-//не понятно(требует инициализации)
-    var totalAccurace: Double = 0.0
-
-    var gameCount: Int = 0
-    
-    
+ 
     private let userDefaults = UserDefaults.standard
     
     var totalAccuracy: Double {
@@ -15,7 +9,6 @@ final class StatisticServiceImplementation: StatisticServiceProtocol {
                 return 0
             }
         return Double(correct) / Double(total) * 100
-        
     }
     
     var gamesCount: Int {
@@ -66,7 +59,6 @@ final class StatisticServiceImplementation: StatisticServiceProtocol {
         }
         
     }
-    
     
     private enum Keys: String {
         case correct, total, bestGame, gamesCount
