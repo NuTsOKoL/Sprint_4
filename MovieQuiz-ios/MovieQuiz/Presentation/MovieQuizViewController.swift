@@ -44,12 +44,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         }
         let givenAnswer = true
         
-        noButton.isEnabled = false
-        yesButton.isEnabled = false
+        changeStateButtons(isEnabled: false)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self else {return}
-            self.noButton.isEnabled = true
-            self.yesButton.isEnabled = true
+            self.changeStateButtons(isEnabled: true)
         }
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
@@ -59,15 +57,18 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         }
         let givenAnswer = false
         
-        noButton.isEnabled = false
-        yesButton.isEnabled = false
+        changeStateButtons(isEnabled: false)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self else {return}
-            self.noButton.isEnabled = true
-            self.yesButton.isEnabled = true
+            self.changeStateButtons(isEnabled: true)
         }
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
+    
+    private func changeStateButtons(isEnabled: Bool) {
+            yesButton.isEnabled = isEnabled
+            noButton.isEnabled = isEnabled
+        }
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
         let questionStep = QuizStepViewModel(
@@ -128,7 +129,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         let totalPlayCount = "Количество сыгранных квизов: \(statisticService.gamesCount)"
         let currentGameResult = "Ваш результат: \(correctAnswers)/\(questionAmount) "
         let averageAccuracy = "Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%"
-        let bestGameInfo = "Рекорд:  \(bestGame.correct)/10" + "(\(bestGame.date.dateTimeString)"
+        let bestGameInfo = "Рекорд:  \(bestGame.correct)/10" + "(\(bestGame.date.dateTimeString))"
         let resultMessage = [currentGameResult, totalPlayCount, bestGameInfo,
                              averageAccuracy].joined(separator: "\n")
         return resultMessage
