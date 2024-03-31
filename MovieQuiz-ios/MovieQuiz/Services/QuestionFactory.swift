@@ -3,7 +3,7 @@ import UIKit
 final class QuestionFactory: QuestionFactoryProtocol {
 
     private let moviesLoader: MoviesLoading
-    private var delegate: QuestionFactoryDelegate?
+    weak var delegate: QuestionFactoryDelegate?
     private var movies: [MostPopularMovie] = []
     
     init(moviesLoader: MoviesLoading, delegate: QuestionFactoryDelegate?) {
@@ -56,7 +56,7 @@ final class QuestionFactory: QuestionFactoryProtocol {
                 }
             }
         }
-    } 
+    }
     func requestNextQuestion() {
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }
@@ -88,5 +88,3 @@ final class QuestionFactory: QuestionFactoryProtocol {
         }
     }
 }
-
-
