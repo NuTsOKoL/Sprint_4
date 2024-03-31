@@ -2,16 +2,14 @@ import UIKit
 
 final class QuestionFactory: QuestionFactoryProtocol {
 
-    private var movies: [MostPopularMovie] = []
-    
-    private var moviesLoader: MoviesLoading?
+    private let moviesLoader: MoviesLoading?
     private var delegate: QuestionFactoryDelegate?
+    private var movies: [MostPopularMovie] = []
     
     init(moviesLoader: MoviesLoader, delegate: QuestionFactoryDelegate?) {
         self.moviesLoader = moviesLoader
         self.delegate = delegate
     }
-    
 //    private let questions: [QuizQuestion] = [
 //        QuizQuestion(image: "The Godfather", 
 //                     text: "Рейтинг этого фильма больше чем 6?",
