@@ -27,6 +27,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         statisticService = StatisticServiceImplementation()
         showLoadingIndicator()
         questionFactory?.loadData()
+        
+        self.activityIndicator.hidesWhenStopped = true
     }
     //MARK: - QuestionFactoryDelegate
     func didReceiveNextQuestion(question: QuizQuestion?) {
@@ -75,17 +77,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     //MARK: activityIndicator
     private func showLoadingIndicator() {
-        activityIndicator.isHidden = false
         activityIndicator.startAnimating()
     }
     private func hideLoadingIndicator() {
-        activityIndicator.isHidden = true
         activityIndicator.stopAnimating()
     }
     
     func didLoadDataFromServer() {
-        activityIndicator.isHidden = true
         questionFactory?.requestNextQuestion()
+        hideLoadingIndicator()
     }
     func didFailToLoadData(with error: Error) {
         showNetworkError(message: error.localizedDescription)
@@ -102,6 +102,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         imageView.image = step.image
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
+        hideLoadingIndicator()
     }
     
     private func showAnswerResult(isCorrect: Bool) {
@@ -124,6 +125,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             showResult()
         } else {
             currentQuestionIndex += 1
+            showLoadingIndicator()
             questionFactory?.requestNextQuestion()
         }
     }
@@ -137,6 +139,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             buttonText: "Сыграть еще раз") { [weak self] in
                 self?.currentQuestionIndex = 0
                 self?.correctAnswers = 0
+                self?.showLoadingIndicator()
                 self?.questionFactory?.requestNextQuestion()
             }
         alertPresenter?.show(alertModel: alertModel)
