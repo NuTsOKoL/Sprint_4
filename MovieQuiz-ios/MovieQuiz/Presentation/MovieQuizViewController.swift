@@ -1,6 +1,6 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController {
+final class MovieQuizViewController: UIViewController, MovieQuizViewControllerProtocol {
     
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var textLabel: UILabel!
@@ -44,6 +44,19 @@ final class MovieQuizViewController: UIViewController {
         hideLoadingIndicator()
     }
     
+    func showResult() {
+       
+       let alertModel = AlertModel(
+           title: "Этот раунд окончен!",
+           message: presenter.makeResultMessage(),
+           buttonText: "Сыграть еще раз",
+           completion: { [weak self] in
+               self?.presenter.restartGame()
+           }
+       )
+       alertPresenter?.show(alertModel: alertModel)
+   }
+    
     func hightLightImageBorder(isCorrectAnswer: Bool) {
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
@@ -85,18 +98,5 @@ final class MovieQuizViewController: UIViewController {
             }
         )
         alertPresenter?.show(alertModel: model)
-    }
-    
-     func showResult() {
-        
-        let alertModel = AlertModel(
-            title: "Этот раунд окончен!",
-            message: presenter.makeResultMessage(),
-            buttonText: "Сыграть еще раз",
-            completion: { [weak self] in
-                self?.presenter.restartGame()
-            }
-        )
-        alertPresenter?.show(alertModel: alertModel)
     }
 }
