@@ -27,6 +27,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         showLoadingIndicator()
         questionFactory?.loadData()
         
+        presenter.viewController = self
         self.activityIndicator.hidesWhenStopped = true
     }
     //MARK: - QuestionFactoryDelegate
@@ -43,33 +44,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     //MARK: - yes/no button
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
-        guard let currentQuestion else {
-            return
-        }
-        let givenAnswer = true
-        
-        changeStateButtons(isEnabled: false)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            guard let self else {return}
-            self.changeStateButtons(isEnabled: true)
-        }
-        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        presenter.currentQuestion = currentQuestion
+        presenter.yesButtonClicked()
     }
     @IBAction private func noButtonClicked(_ sender: UIButton) {
-        guard let currentQuestion else {
-            return
-        }
-        let givenAnswer = false
-        
-        changeStateButtons(isEnabled: false)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            guard let self else {return}
-            self.changeStateButtons(isEnabled: true)
-        }
-        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        presenter.currentQuestion = currentQuestion
+        presenter.noButtonClicked()
     }
     
-    private func changeStateButtons(isEnabled: Bool) {
+     func changeStateButtons(isEnabled: Bool) {
             yesButton.isEnabled = isEnabled
             noButton.isEnabled = isEnabled
         }
@@ -97,7 +80,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         hideLoadingIndicator()
     }
     
-    private func showAnswerResult(isCorrect: Bool) {
+     func showAnswerResult(isCorrect: Bool) {
         if isCorrect {
             correctAnswers += 1
         }
