@@ -11,7 +11,7 @@ protocol MovieQuizViewControllerProtocol: AnyObject {
     func show(quiz step: QuizStepViewModel)
     func showResult()
     
-    func hightLightImageBorder(isCorrectAnswer: Bool)
+    func highlightImageBorder(isCorrectAnswer: Bool)
     func noImageBorder()
     
     func showLoadingIndicator()
