@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		041D514C2BCB8D2B0061F141 /* MovieQuizPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041D514B2BCB8D2B0061F141 /* MovieQuizPresenter.swift */; };
 		0421E5102B94503F00548113 /* YS Display-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0421E50F2B94503F00548113 /* YS Display-Medium.ttf */; };
 		0421E5122B94504B00548113 /* YS Display-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0421E5112B94504B00548113 /* YS Display-Bold.ttf */; };
 		047EFE9B2BA62BEF00865441 /* QuestionFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047EFE9A2BA62BEF00865441 /* QuestionFactory.swift */; };
@@ -36,6 +37,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		041D514B2BCB8D2B0061F141 /* MovieQuizPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieQuizPresenter.swift; sourceTree = "<group>"; };
 		0421E50F2B94503F00548113 /* YS Display-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YS Display-Medium.ttf"; sourceTree = "<group>"; };
 		0421E5112B94504B00548113 /* YS Display-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YS Display-Bold.ttf"; sourceTree = "<group>"; };
 		047EFE9A2BA62BEF00865441 /* QuestionFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionFactory.swift; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				AD1ABAB52831907B00B3E448 /* MovieQuizViewController.swift */,
+				041D514B2BCB8D2B0061F141 /* MovieQuizPresenter.swift */,
 				AD1ABAB72831907B00B3E448 /* Main.storyboard */,
 				047EFEAF2BA7092F00865441 /* AlertPresenter.swift */,
 				047EFEB12BA7098300865441 /* AlertProtocol.swift */,
@@ -257,6 +260,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				041D514C2BCB8D2B0061F141 /* MovieQuizPresenter.swift in Sources */,
 				048EE9AE2BB9201F00E451E6 /* NetworkClient.swift in Sources */,
 				AD5EE5DE284D7887003966EF /* UIColor+Extensions.swift in Sources */,
 				047EFEB02BA7092F00865441 /* AlertPresenter.swift in Sources */,
