@@ -23,11 +23,23 @@ final class MovieQuizPresenter {
             questionNumber: "\(currentQuestionIndex + 1)/\(questionAmount)")
     }
     
-    func yesButtonClicked() {
+    func didReceiveNextQuestion(question: QuizQuestion?) {
+        guard let question = question else {
+            return
+        }
+        currentQuestion = question
+        let viewModel = convert(model: question)
+        
+        DispatchQueue.main.async { [weak self] in
+            self?.viewController?.show(quiz: viewModel)
+        }
+    }
+    
+    private func didAnswer(isYes: Bool) {
         guard let currentQuestion else {
             return
         }
-        let givenAnswer = true
+        let givenAnswer = isYes
         
         viewController?.changeStateButtons(isEnabled: false)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
@@ -35,18 +47,13 @@ final class MovieQuizPresenter {
             self.viewController?.changeStateButtons(isEnabled: true)
         }
         viewController?.showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+    }
+    func yesButtonClicked() {
+       didAnswer(isYes: true)
     }
     func noButtonClicked() {
-        guard let currentQuestion else {
-            return
-        }
-        let givenAnswer = false
-        
-        viewController?.changeStateButtons(isEnabled: false)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            guard let self else {return}
-            self.viewController?.changeStateButtons(isEnabled: true)
-        }
-        viewController?.showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        didAnswer(isYes: false)
     }
+    
+    
 }
