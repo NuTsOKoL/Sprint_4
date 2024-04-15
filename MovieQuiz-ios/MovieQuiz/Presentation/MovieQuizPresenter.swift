@@ -42,6 +42,8 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         }
     }
   
+    //MARK: functions
+    
     private func isLastQuestion() -> Bool {
         currentQuestionIndex == questionsAmount - 1
     }
