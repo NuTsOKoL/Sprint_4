@@ -17,7 +17,6 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
                 
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
         questionFactory?.loadData()
-        viewController.showLoadingIndicator()
     }
    
     // MARK: - QuestionFactoryDelegate

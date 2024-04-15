@@ -1,4 +1,3 @@
-
 import Foundation
 import XCTest
 @testable import MovieQuiz
@@ -44,7 +43,7 @@ final class MovieQuizViewControllerMock: MovieQuizViewControllerProtocol {
 
 final class MovieQuizPresenterTests: XCTestCase {
     func testPresenterConvertModel() throws {
-        let viewControllerMock = MovieQuizViewControllerMock()
+        let viewControllerMock = MovieQuizViewController()
         let sut = MovieQuizPresenter(viewController: viewControllerMock)
         
         let emptyData = Data()
