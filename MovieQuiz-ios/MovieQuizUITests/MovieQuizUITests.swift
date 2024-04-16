@@ -1,10 +1,6 @@
 import XCTest
-
-
-class MovieQuizUITests: XCTestCase {
-    
+final class MovieQuizUITests: XCTestCase {
     var app: XCUIApplication!
-    
     override func setUpWithError() throws {
         try super.setUpWithError()
         
@@ -12,17 +8,14 @@ class MovieQuizUITests: XCTestCase {
         app.launch()
         
         continueAfterFailure = false
-        
         continueAfterFailure = false
     }
-    
     override func tearDownWithError() throws {
         try super.tearDownWithError()
         
         app.terminate()
         app = nil
     }
- 
     func testYesButton() {
         sleep(3)
         
@@ -37,7 +30,6 @@ class MovieQuizUITests: XCTestCase {
         
         XCTAssertNotEqual(firstPosterData, secondPosterData)
     }
-    
     func testNoButton() {
         sleep(3)
         
@@ -52,7 +44,6 @@ class MovieQuizUITests: XCTestCase {
         
         XCTAssertNotEqual(firstPosterData, secondPosterData)
     }
-    
     func testGameFinish() {
         sleep(2)
         for _ in 1...10 {
@@ -66,14 +57,12 @@ class MovieQuizUITests: XCTestCase {
         XCTAssertTrue(alert.label == "Этот раунд окончен!")
         XCTAssertTrue(alert.buttons.firstMatch.label == "Сыграть еще раз!")
     }
-    
     func testAlertDismiss() {
         sleep(2)
         for _ in 1...10 {
             app.buttons["No"].tap()
             sleep(2)
         }
-        
         let alert = app.alerts["Game"]
         alert.buttons.firstMatch.tap()
         

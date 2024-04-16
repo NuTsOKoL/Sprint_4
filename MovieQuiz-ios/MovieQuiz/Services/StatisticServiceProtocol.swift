@@ -1,5 +1,4 @@
 import UIKit
-
 protocol StatisticServiceProtocol {
     var totalAccuracy: Double { get }
     var gamesCount: Int { get }

@@ -1,4 +1,4 @@
 import UIKit
- protocol AlertProtocol {
-     func show(alertModel: AlertModel)
+protocol AlertProtocol {
+    func show(alertModel: AlertModel)
 }
