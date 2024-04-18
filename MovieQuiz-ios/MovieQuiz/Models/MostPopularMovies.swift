@@ -1,10 +1,8 @@
 import UIKit
-
 struct MostPopularMovies: Codable {
     let errorMessage: String
     let items: [MostPopularMovie]
 }
-
 struct MostPopularMovie: Codable {
     let title: String
     let rating: String
@@ -17,10 +15,8 @@ struct MostPopularMovie: Codable {
         guard let newURL = URL(string: imageUrlString) else {
             return imageURL
         }
-        
         return newURL
     }
-    
     private enum CodingKeys : String, CodingKey {
         case title = "fullTitle"
         case rating = "imDbRating"
